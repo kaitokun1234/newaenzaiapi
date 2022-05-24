@@ -12,6 +12,7 @@ before do
 end
 
 get '/show/:num' do
+  response.headers['Access-Control-Allow-Origin'] = '*'
   hash = File.open("numbersNFT/jsons/#{params[:num]}.json"){ |f| JSON.load(f) }
   #hash["image"] = "http://localhost:4567/images/#{params[:num]}.png"
   hash.to_json
