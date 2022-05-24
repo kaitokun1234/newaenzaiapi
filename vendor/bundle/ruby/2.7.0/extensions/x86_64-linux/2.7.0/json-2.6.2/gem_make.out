@@ -1,0 +1,13 @@
+current directory: /home/kirua/blockchain/product/senzaiAPI/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+/usr/bin/ruby2.7 -I /usr/lib/ruby/2.7.0 -r ./siteconf20220525-1898-53g5nk.rb extconf.rb
+creating Makefile
+
+current directory: /home/kirua/blockchain/product/senzaiAPI/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+make "DESTDIR=" clean
+
+current directory: /home/kirua/blockchain/product/senzaiAPI/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+make "DESTDIR="
+make: Nothing to be done for 'all'.
+
+current directory: /home/kirua/blockchain/product/senzaiAPI/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+make "DESTDIR=" install
