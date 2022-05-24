@@ -9,5 +9,6 @@ gem 'net-imap'
 gem 'net-pop'
 gem 'net-smtp'
 gem 'puma'
+gem "sinatra-cross_origin", "~> 0.3.1"
 
 # gem "rails"
