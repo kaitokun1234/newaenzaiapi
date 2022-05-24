@@ -8,5 +8,6 @@ gem 'json'
 gem 'net-imap'
 gem 'net-pop'
 gem 'net-smtp'
+gem 'puma'
 
 # gem "rails"
