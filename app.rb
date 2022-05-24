@@ -3,7 +3,10 @@ Bundler.require
 require 'sinatra'
 require 'json'
 require 'sinatra/cross_origin'
-enable :cross_origin
+
+configure do
+  enable :cross_origin
+end
 
 get '/' do
   "Z"
