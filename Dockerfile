@@ -6,3 +6,4 @@ COPY . /code
 RUN bundle install
 
 CMD ["bundle", "exec", "ruby", "./app.rb"]
+EXPOSE 8080
