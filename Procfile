@@ -1,1 +1,1 @@
-    web: bundle exec ruby app.rb -p 8080
+    web: bundle exec ruby app.rb -p $PORT
