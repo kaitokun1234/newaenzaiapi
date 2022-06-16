@@ -11,7 +11,7 @@ configure do
 end
 
 get '/' do
-  "Z"
+  erb :index
 end
 
 get '/show/:num' do
