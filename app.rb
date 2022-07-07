@@ -19,6 +19,7 @@ end
 
 get '/senzai/metadata/:num' do
   cross_origin
+  content_type :json
   fileID = params[:num]
   if !fileID.include? ".json"
     fileID = fileID + ".json"
