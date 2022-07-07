@@ -5,7 +5,7 @@ require 'sinatra/reloader'
 require 'sinatra/cross_origin'
 require 'json'
 require 'eth'
-require 'rmagick'
+#require 'rmagick'
 
 set :bind, '0.0.0.0'
 
@@ -1019,6 +1019,7 @@ get '/mintnum' do
   "#{totalSupply}"
 end
 
+=begin
 get '/asobiba/:message' do
   params[:message]
   message = params[:message]
@@ -1036,6 +1037,7 @@ get '/asobiba/:message' do
   image.write('public/temp.png')
   send_file "public/temp.png"
 end
+=end
 
 def alreadyMintCheck(num)
   abi = '[

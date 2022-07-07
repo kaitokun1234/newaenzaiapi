@@ -7,7 +7,7 @@ gem 'json'
 gem 'net-imap'
 gem 'net-pop'
 gem 'net-smtp'
-gem 'rmagick'
+#gem 'rmagick'
 gem 'puma'
 gem "sinatra-cross_origin", "~> 0.3.1"
 gem 'eth', '0.5.5'
