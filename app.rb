@@ -5,6 +5,7 @@ require 'sinatra/reloader'
 require 'sinatra/cross_origin'
 require 'json'
 require 'eth'
+require 'rmagick'
 
 set :bind, '0.0.0.0'
 
@@ -18,8 +19,13 @@ end
 
 get '/senzai/metadata/:num' do
   cross_origin
-  if alreadyMintCheck(params[:num].split(".")[0].to_i)
-    hash = File.open("numbersNFT/jsons/#{params[:num]}"){ |f| JSON.load(f) }
+  fileID = params[:num]
+  if !fileID.include? ".json"
+    fileID = fileID + ".json"
+  end
+  if alreadyMintCheck(fileID.split(".")[0].to_i)
+    fileID.split(".")[1]
+    hash = File.open("numbersNFT/jsons/#{fileID}"){ |f| JSON.load(f) }
     hash.to_json
   else
     "it is not mint yet"
@@ -1011,6 +1017,24 @@ get '/mintnum' do
   puts "コントラクトアドレス→#{contract.address}"
   totalSupply = cli.call(contract, "totalSupply")
   "#{totalSupply}"
+end
+
+get '/asobiba/:message' do
+  params[:message]
+  message = params[:message]
+  image = Magick::ImageList.new('public/image.jpg')
+  draw = Magick::Draw.new
+  draw.annotate(image, 0, 0, 50, 100, message) do
+    self.font = 'public/logotype.otf'
+    self.fill = '#333333'
+    self.align = Magick::LeftAlign
+    self.stroke = 'transparent'
+    self.pointsize = 30
+    self.text_antialias = true
+    self.kerning = 1
+  end
+  image.write('public/temp.png')
+  send_file "public/temp.png"
 end
 
 def alreadyMintCheck(num)
