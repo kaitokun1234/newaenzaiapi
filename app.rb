@@ -8,6 +8,7 @@ require 'eth'
 #require 'rmagick'
 
 set :bind, '0.0.0.0'
+set :protection, :except => :json_csrf
 
 configure do
   enable :cross_origin
