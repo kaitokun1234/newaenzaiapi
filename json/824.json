@@ -1,0 +1,43 @@
+{
+  "name": "SENZAI #824",
+  "description": "SENZAI is your Meta-identity",
+  "image": "https://senzai.app/senzai/images/824.png",
+  "attributes": [
+    {
+      "trait_type": "background",
+      "value": "ff716b"
+    },
+    {
+      "trait_type": "body",
+      "value": "Human"
+    },
+    {
+      "trait_type": "special",
+      "value": "none"
+    },
+    {
+      "trait_type": "eye",
+      "value": "Type-008C"
+    },
+    {
+      "trait_type": "hair",
+      "value": "Type-003C"
+    },
+    {
+      "trait_type": "mouth",
+      "value": "Type-004B"
+    },
+    {
+      "trait_type": "clothes",
+      "value": "SZ-00DF001C"
+    },
+    {
+      "trait_type": "ear",
+      "value": "none"
+    },
+    {
+      "trait_type": "face",
+      "value": "none"
+    }
+  ]
+}

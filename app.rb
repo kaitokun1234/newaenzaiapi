@@ -15,7 +15,8 @@ configure do
 end
 
 get '/' do
-  erb :index
+  #erb :index
+  redirect 'https://sz.senzai.app/'
 end
 
 get '/senzai/metadata/:num' do
@@ -27,7 +28,7 @@ get '/senzai/metadata/:num' do
   end
   if alreadyMintCheck(fileID.split(".")[0].to_i)
     fileID.split(".")[1]
-    hash = File.open("numbersNFT/jsons/#{fileID}"){ |f| JSON.load(f) }
+    hash = File.open("json/#{fileID}"){ |f| JSON.load(f) }
     hash.to_json
   else
     "it is not mint yet"
@@ -1999,7 +2000,7 @@ def alreadyMintCheck(num)
       "type": "function"
     }
   ]'
-  addr = "0xED5AF388653567Af2F388E6224dC7C4b3241C544" #テストでazukiのアドレス
+  addr = "0x9c8230d31F9f513901685f91FA18B3C038118A1E" #テストでazukiのアドレス
   cli = Eth::Client.create "https://mainnet.infura.io/v3/91ee6f7916c2401da3e84e67d4d4be20"
   contractname = 'Azuki'
   contract = Eth::Contract.from_abi(name: contractname, address: addr, abi: abi)
