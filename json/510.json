@@ -9,7 +9,7 @@
     },
     {
       "trait_type": "body",
-      "value": "Human"
+      "value": "Women"
     },
     {
       "trait_type": "special",
@@ -17,23 +17,23 @@
     },
     {
       "trait_type": "eye",
-      "value": "Type-009A"
+      "value": "Type-001B"
     },
     {
       "trait_type": "hair",
-      "value": "Type-002F"
+      "value": "Type-007D"
     },
     {
       "trait_type": "mouth",
-      "value": "Type-006A"
+      "value": "Type-003D"
     },
     {
       "trait_type": "clothes",
-      "value": "SZ-00DF001C"
+      "value": "SZ-00DF001B"
     },
     {
       "trait_type": "ear",
-      "value": "SZ-01R1005A"
+      "value": "none"
     },
     {
       "trait_type": "face",

@@ -5,27 +5,27 @@
   "attributes": [
     {
       "trait_type": "background",
-      "value": "0d204a"
+      "value": "f1eff0"
     },
     {
       "trait_type": "body",
-      "value": "Human"
+      "value": "Women"
     },
     {
       "trait_type": "special",
-      "value": "Type-007A"
+      "value": "none"
     },
     {
       "trait_type": "eye",
-      "value": "Type-001C"
+      "value": "Type-002D"
     },
     {
       "trait_type": "hair",
-      "value": "Type-002G"
+      "value": "Type-005A"
     },
     {
       "trait_type": "mouth",
-      "value": "Type-003D"
+      "value": "Type-006A"
     },
     {
       "trait_type": "clothes",
@@ -37,7 +37,7 @@
     },
     {
       "trait_type": "face",
-      "value": "SZ-02R1001B"
+      "value": "none"
     }
   ]
 }

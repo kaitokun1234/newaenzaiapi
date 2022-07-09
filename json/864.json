@@ -5,39 +5,39 @@
   "attributes": [
     {
       "trait_type": "background",
-      "value": "eaee56"
+      "value": "f1eff0"
     },
     {
       "trait_type": "body",
-      "value": "Human"
+      "value": "Men"
     },
     {
       "trait_type": "special",
-      "value": "none"
+      "value": "Type-102A"
     },
     {
       "trait_type": "eye",
-      "value": "Type-002D"
+      "value": "Type-109B"
     },
     {
       "trait_type": "hair",
-      "value": "Type-007F"
+      "value": "Type-111A"
     },
     {
       "trait_type": "mouth",
-      "value": "Type-010A"
+      "value": "Type-101A"
     },
     {
       "trait_type": "clothes",
-      "value": "SZ-00DF001B"
+      "value": "SZ-10DF001C"
     },
     {
       "trait_type": "ear",
-      "value": "SZ-01R1009A"
+      "value": "none"
     },
     {
       "trait_type": "face",
-      "value": "SZ-02R1002B"
+      "value": "none"
     }
   ]
 }
