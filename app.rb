@@ -5,7 +5,7 @@ require 'sinatra/reloader'
 require 'sinatra/cross_origin'
 require 'json'
 require 'eth'
-#require 'rmagick'
+require 'rmagick'
 
 set :bind, '0.0.0.0'
 set :protection, :except => :json_csrf
@@ -39,6 +39,15 @@ get '/senzai/images/:num' do
   cross_origin
   if alreadyMintCheck(params[:num].split(".")[0].to_i)
     send_file "images/#{params[:num]}"
+  else
+    "it is not mint yet"
+  end
+end
+
+get '/raw_images/:num' do
+  cross_origin
+  if alreadyMintCheck(params[:num].split(".")[0].to_i)
+    send_file "raw_images/#{params[:num]}"
   else
     "it is not mint yet"
   end
@@ -1022,26 +1031,41 @@ get '/mintnum' do
   "#{totalSupply}"
 end
 
-=begin
 get '/asobiba/:message' do
-  params[:message]
   message = params[:message]
-  image = Magick::ImageList.new('public/image.jpg')
-  draw = Magick::Draw.new
-  draw.annotate(image, 0, 0, 50, 100, message) do
-    self.font = 'public/logotype.otf'
-    self.fill = '#333333'
-    self.align = Magick::LeftAlign
-    self.stroke = 'transparent'
-    self.pointsize = 30
-    self.text_antialias = true
-    self.kerning = 1
-  end
+  logo = Magick::Image.read('public/image.jpg').first
+  image = Magick::Image.read('public/penguin.png').first
+  image.composite!(logo, Magick::SouthWestGravity, Magick::OverCompositeOp)
+  # draw = Magick::Draw.new
+  # draw.annotate(image, 0, 0, 50, 400, message) do
+  #   self.font = 'public/logotype.otf'
+  #   self.fill = '#333333'
+  #   self.align = Magick::LeftAlign
+  #   self.stroke = 'transparent'
+  #   self.pointsize = 30
+  #   self.text_antialias = true
+  #   self.kerning = 1
+  # end
   image.write('public/temp.png')
   send_file "public/temp.png"
 end
-=end
 
+get '/dressup' do
+  erb :dressup
+end
+
+post '/dress' do
+  body = Magick::Image.read("raw_images/#{params[:target]}.png").first
+  cloth = Magick::Image.read(imgpath("cloths", params[:cloth])).first
+  body.composite!(cloth, Magick::SouthWestGravity, Magick::OverCompositeOp)
+  body.write("images/#{params[:target]}.png")
+  redirect "/dressup"
+  #send_file "images/#{params[:target]}.png"
+end
+
+def imgpath(folder, num)
+  return "public/assets/#{folder}/#{num}.png"
+end
 def alreadyMintCheck(num)
   abi = '[
     {
@@ -2000,7 +2024,7 @@ def alreadyMintCheck(num)
       "type": "function"
     }
   ]'
-  addr = "0x9c8230d31F9f513901685f91FA18B3C038118A1E" #テストでazukiのアドレス
+  addr = "0x9c8230d31F9f513901685f91FA18B3C038118A1E"
   cli = Eth::Client.create "https://mainnet.infura.io/v3/91ee6f7916c2401da3e84e67d4d4be20"
   contractname = 'Azuki'
   contract = Eth::Contract.from_abi(name: contractname, address: addr, abi: abi)

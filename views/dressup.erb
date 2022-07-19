@@ -1,0 +1,139 @@
+<style>
+.box {
+  width: 200px;       /* 適当な幅を指定 */
+  height: 200px;      /* 適当な高さを指定 */
+  position: relative; /* 基準位置とする */
+}
+
+.box img {
+  width: 200px;       /* 適当な幅を指定 */
+  position: absolute; /* 相対位置に指定 */
+}
+
+body {
+  background-color: black;
+}
+
+</style>
+
+<a class="btn btn-primary connect">connect wallet</a>
+<h1 class="text-white">着替え</h1>
+
+<div class="container text-white">
+  <div class="row">
+    <div class="box bg-dark col-6">
+      <img src="" height="200" width="200" class="preview img_01">
+      <img src="" height="200" width="200" class="preview img_02">
+    </div>
+
+    <div class="col-6">
+      <div id="cloths" style="display:none;">
+        <h3 class="mt-4">服選択</h3>
+        <input type="image" src="assets/cloths/0.png" style="border: double;" height="100" width="100" class="cloth" data-id='0'/>
+        <input type="image" src="assets/cloths/1.png" style="border: double;" height="100" width="100" class="cloth" data-id='1'/> 
+        <input type="image" src="assets/cloths/2.png" style="border: double;" height="100" width="100" class="cloth" data-id='2'/>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <h3 class="text-white">body選択</h3>
+<div id="bodys" style="display: none;">
+  <input type="image" src="/senzai/images/156.png" style="border: double;" height="100" width="100" class="body" data-id='156'/>
+  <input type="image" src="/senzai/images/17.png" style="border: double;" height="100" width="100" class="body" data-id='17'/>
+  <input type="image" src="/senzai/images/191.png" style="border: double;" height="100" width="100" class="body" data-id='191'/>
+  <input type="image" src="/senzai/images/190.png" style="border: double;" height="100" width="100" class="body" data-id='190'/>
+  <input type="image" src="/senzai/images/189.png" style="border: double;" height="100" width="100" class="body" data-id='189'/>
+  <input type="image" src="/senzai/images/188.png" style="border: double;" height="100" width="100" class="body" data-id='188'/>
+</div>
+
+<form action="dress" method="POST">
+  <div>
+    <input type="text" class="inputbody" name="target" placeholder="体" hidden>
+  </div>
+  <div>
+    <input type="text" class="inputcloth" name="cloth" placeholder="服" hidden>
+  </div>
+  <div>
+    <input type="submit" value="決定">
+  </div>
+</form>
+
+<script src="./js/abi.js"></script>
+<script>
+  let web3, contract, user, usersNfts;
+  const contractAddr = "0x9c8230d31f9f513901685f91fa18b3c038118a1e";
+
+  $(document).ready(async () => {
+  web3 = await new Web3(Web3.givenProvider);
+  switchNetwork(1);
+  contract =  await new web3.eth.Contract(abi.senzai, contractAddr);
+  })
+
+  $(".connect").click(async () => {
+  try{
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    user = accounts[0];
+    if(await switchNetwork(1)){
+      web3 = await new Web3(Web3.givenProvider);
+      $(".connect").html(user);
+      contract =  await new web3.eth.Contract(abi.senzai, contractAddr);
+      $("#bodys").show();
+      //usersNfts = await getNftIds(user);
+      //console.log("この人の持ってるtokenのidたち→",usersNfts);
+    }
+  } catch (error){
+    alert(error.message);
+  }
+})
+
+const switchNetwork = async (chainId) => {
+  const currentChainId = await web3.eth.net.getId();
+  if (currentChainId !== chainId) {
+    try {
+      await web3.currentProvider.request({
+        method: 'wallet_switchEthereumChain',
+          params: [{ chainId: Web3.utils.toHex(chainId) }],
+        });
+      return true;
+    } catch (switchError) {
+      return false;
+      if (switchError.code === 4902) {
+        alert('add this chain id')
+      }
+    }
+  }else{
+    return true;
+  }
+}
+
+async function getNftIds(_usr){
+  const balance = await contract.methods.balanceOf(_usr).call();
+  console.log("balance:",balance);
+  let geted = [];
+  for(i=0;i < 100 && balance > geted.length; i++){
+    let owner = await contract.methods.ownerOf(i).call();
+    if(owner.toUpperCase() == user.toUpperCase()){
+      geted.push(i);
+      console.log(i+"を持ってる！");
+    }
+  }
+  return geted;
+}
+
+
+$('.body').on('click', function(){
+  let val = $(this).data('id');
+  $('.inputbody').val(val);
+  $(".preview.img_01").attr('src', "/raw_images/"+val+".png")
+  $('#cloths').show();
+})
+
+  $('.cloth').on('click', function(){
+    let val = $(this).data('id');
+    $('.inputcloth').val(val);
+    $(".preview.img_02").attr('src', "assets/cloths/"+val+".png")
+  })
+</script>
