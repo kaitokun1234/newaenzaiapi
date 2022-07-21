@@ -1,43 +1,43 @@
 {
-  "name": "SENZAI #642",
-  "description": "SENZAI is your Meta-identity",
-  "image": "https://senzai.app/senzai/images/642.png",
-  "attributes": [
-    {
-      "trait_type": "background",
-      "value": "7a7aff"
-    },
-    {
-      "trait_type": "body",
-      "value": "Men"
-    },
-    {
-      "trait_type": "special",
-      "value": "Type-104A"
-    },
-    {
-      "trait_type": "eye",
-      "value": "Type-103C"
-    },
-    {
-      "trait_type": "hair",
-      "value": "Type-109F"
-    },
-    {
-      "trait_type": "mouth",
-      "value": "Type-103A"
-    },
-    {
-      "trait_type": "clothes",
-      "value": "SZ-10DF001B"
-    },
-    {
-      "trait_type": "ear",
-      "value": "none"
-    },
-    {
-      "trait_type": "face",
-      "value": "none"
-    }
-  ]
+    "name": "SENZAI #642",
+    "description": "SENZAI is your Meta-identity",
+    "image": "https://senzai.app/senzai/images/642.png",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "7a7aff"
+        },
+        {
+            "trait_type": "body",
+            "value": "Men-B"
+        },
+        {
+            "trait_type": "special",
+            "value": "Type-104A"
+        },
+        {
+            "trait_type": "eye",
+            "value": "Type-103C"
+        },
+        {
+            "trait_type": "hair",
+            "value": "Type-109F"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "Type-103A"
+        },
+        {
+            "trait_type": "clothes",
+            "value": "SZ-10DF001B"
+        },
+        {
+            "trait_type": "ear",
+            "value": "none"
+        },
+        {
+            "trait_type": "face",
+            "value": "none"
+        }
+    ]
 }

@@ -1,6 +1,6 @@
 <style>
 .box {
-  width: 200px;       /* 適当な幅を指定 */
+  /*width: 200px;       /* 適当な幅を指定 */
   height: 200px;      /* 適当な高さを指定 */
   position: relative; /* 基準位置とする */
 }
@@ -17,28 +17,31 @@ body {
 </style>
 
 <a class="btn btn-primary connect">connect wallet</a>
-<h1 class="text-white">着替え</h1>
 
-<div class="container text-white">
-  <div class="row">
-    <div class="box bg-dark col-6">
+    <div class="box" style="display: none;">
       <img src="" height="200" width="200" class="preview img_01">
       <img src="" height="200" width="200" class="preview img_02">
     </div>
 
-    <div class="col-6">
-      <div id="cloths" style="display:none;">
-        <h3 class="mt-4">服選択</h3>
-        <input type="image" src="assets/cloths/0.png" style="border: double;" height="100" width="100" class="cloth" data-id='0'/>
-        <input type="image" src="assets/cloths/1.png" style="border: double;" height="100" width="100" class="cloth" data-id='1'/> 
-        <input type="image" src="assets/cloths/2.png" style="border: double;" height="100" width="100" class="cloth" data-id='2'/>
-      </div>
+    <div class="cloths Wom" style="display:none;">
+      <h3 class="mt-4">choose</h3>
+      <% for filename in @clothesFemaleNames do %>
+        <input type="image" src="<%= @clothesFamalePath %><%= filename %>" style="border: double;" height="100" width="100" class="cloth" data-id='<%= filename %>'/>
+      <% end %>
+      <input type="image" src="assets/cloths/0.png" style="border: double;" height="100" width="100" class="cloth" data-id='0'/>
+      <input type="image" src="assets/cloths/1.png" style="border: double;" height="100" width="100" class="cloth" data-id='1'/> 
+      <input type="image" src="assets/cloths/2.png" style="border: double;" height="100" width="100" class="cloth" data-id='2'/>
     </div>
-  </div>
-</div>
 
-  <h3 class="text-white">body選択</h3>
+    <div class="cloths Men" style="display:none;" >
+      <h3 class="mt-4">choose</h3>
+      <input type="image" src="assets/cloths/3.png" style="border: double;" height="100" width="100" class="cloth" data-id='3'/>
+      <input type="image" src="assets/cloths/4.png" style="border: double;" height="100" width="100" class="cloth" data-id='4'/> 
+      <input type="image" src="assets/cloths/5.png" style="border: double;" height="100" width="100" class="cloth" data-id='5'/>
+    </div>
+<!--
 <div id="bodys" style="display: none;">
+  <h3 class="text-white">body選択</h3>
   <input type="image" src="/senzai/images/156.png" style="border: double;" height="100" width="100" class="body" data-id='156'/>
   <input type="image" src="/senzai/images/17.png" style="border: double;" height="100" width="100" class="body" data-id='17'/>
   <input type="image" src="/senzai/images/191.png" style="border: double;" height="100" width="100" class="body" data-id='191'/>
@@ -46,22 +49,26 @@ body {
   <input type="image" src="/senzai/images/189.png" style="border: double;" height="100" width="100" class="body" data-id='189'/>
   <input type="image" src="/senzai/images/188.png" style="border: double;" height="100" width="100" class="body" data-id='188'/>
 </div>
-
+-->
 <form action="dress" method="POST">
-  <div>
-    <input type="text" class="inputbody" name="target" placeholder="体" hidden>
+  <div
+  class="inputbody" style="display: none;">
+    <h3>Enter the TokenID</h3>
+    <input type="text" class="inputbody form-control" name="target" placeholder="体">
+    <a class="btn btn-primary mt-3 ok">OK</a>
   </div>
+
   <div>
     <input type="text" class="inputcloth" name="cloth" placeholder="服" hidden>
   </div>
   <div>
-    <input type="submit" value="決定">
+    <input type="submit" value="決定" style="display: none;" class="btn btn-primary mt-5 kettei">
   </div>
 </form>
 
 <script src="./js/abi.js"></script>
 <script>
-  let web3, contract, user, usersNfts;
+  let web3, contract, user, usersNfts, sex;
   const contractAddr = "0x9c8230d31f9f513901685f91fa18b3c038118a1e";
 
   $(document).ready(async () => {
@@ -78,11 +85,9 @@ body {
     user = accounts[0];
     if(await switchNetwork(1)){
       web3 = await new Web3(Web3.givenProvider);
-      $(".connect").html(user);
+      $(".connect").hide();
       contract =  await new web3.eth.Contract(abi.senzai, contractAddr);
-      $("#bodys").show();
-      //usersNfts = await getNftIds(user);
-      //console.log("この人の持ってるtokenのidたち→",usersNfts);
+      $("div.inputbody").show();
     }
   } catch (error){
     alert(error.message);
@@ -109,31 +114,57 @@ const switchNetwork = async (chainId) => {
   }
 }
 
-async function getNftIds(_usr){
-  const balance = await contract.methods.balanceOf(_usr).call();
-  console.log("balance:",balance);
-  let geted = [];
-  for(i=0;i < 100 && balance > geted.length; i++){
-    let owner = await contract.methods.ownerOf(i).call();
-    if(owner.toUpperCase() == user.toUpperCase()){
-      geted.push(i);
-      console.log(i+"を持ってる！");
-    }
+$(".ok").on('click', async function(){
+  let val = $('input.inputbody').val();
+  let owner = await contract.methods.ownerOf(val).call();
+
+
+  if(owner.toUpperCase() != user.toUpperCase()){
+    alert("This NFT's owner is not you");
+    location.reload();
   }
-  return geted;
-}
+  if(owner.toUpperCase() == user.toUpperCase()){
+    $("div.inputbody").hide();
+    $('.box').show();
+    fetch("/senzai/metadata/"+val)
+      .then(response => {
+        return response.json();
+    })
+    .then(jsondata => {
+      console.log(jsondata);
+      console.log(jsondata.attributes[1].value.slice(0, 3));
+      sex = jsondata.attributes[1].value.slice(0, 3);
+      $('.cloths.'+sex).show();
+    });
+    $(".preview.img_01").attr('src', "assets/origin/origin-"+val+".png");
+  }
+})
 
-
-$('.body').on('click', function(){
+/*
+$('.body').on('click', async function(){
   let val = $(this).data('id');
   $('.inputbody').val(val);
   $(".preview.img_01").attr('src', "/raw_images/"+val+".png")
+  let data;
+  fetch("/senzai/metadata/"+val)
+  .then(response => {
+   return response.json();
+})
+.then(jsondata => {
+  console.log(jsondata);
+  $(".preview.img_bg").attr('src', "assets/compound/shirtsBg/"+jsondata.attributes[0].value+".png");
+  console.log("assets/compound/shirtsBg/"+jsondata.attributes[0].value+".png");
+  $(".preview.img_nude").attr('src', "assets/compound/body/"+jsondata.attributes[1].value+".png");
+});
   $('#cloths').show();
 })
+*/
 
   $('.cloth').on('click', function(){
     let val = $(this).data('id');
+    path = sex == "Men" ? "clothesMale" : "clothesFemale"
     $('.inputcloth').val(val);
-    $(".preview.img_02").attr('src', "assets/cloths/"+val+".png")
+    $(".preview.img_02").attr('src', `assets/${path}/${val}`);
+    $('.kettei').show();
   })
 </script>

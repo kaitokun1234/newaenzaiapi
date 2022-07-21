@@ -1026,7 +1026,6 @@ get '/mintnum' do
   cli = Eth::Client.create "https://mainnet.infura.io/v3/91ee6f7916c2401da3e84e67d4d4be20"
   contractname = 'Azuki'
   contract = Eth::Contract.from_abi(name: contractname, address: addr, abi: abi)
-  puts "コントラクトアドレス→#{contract.address}"
   totalSupply = cli.call(contract, "totalSupply")
   "#{totalSupply}"
 end
@@ -1051,11 +1050,15 @@ get '/asobiba/:message' do
 end
 
 get '/dressup' do
+  @clothesFamalePath = 'assets/clothesFemale/'
+  @clothesMalePath = 'assets/clothesMale/'
+  @clothesFemaleNames = allNamesInFolder("public/"+@clothesFamalePath)
+  @clothesMaleNames = allNamesInFolder("public/"+@clothesMalePath)
   erb :dressup
 end
 
 post '/dress' do
-  body = Magick::Image.read("raw_images/#{params[:target]}.png").first
+  body = Magick::Image.read("public/assets/origin/origin-#{params[:target]}.png").first
   cloth = Magick::Image.read(imgpath("cloths", params[:cloth])).first
   body.composite!(cloth, Magick::SouthWestGravity, Magick::OverCompositeOp)
   body.write("images/#{params[:target]}.png")
@@ -1066,6 +1069,7 @@ end
 def imgpath(folder, num)
   return "public/assets/#{folder}/#{num}.png"
 end
+
 def alreadyMintCheck(num)
   abi = '[
     {
@@ -2028,11 +2032,19 @@ def alreadyMintCheck(num)
   cli = Eth::Client.create "https://mainnet.infura.io/v3/91ee6f7916c2401da3e84e67d4d4be20"
   contractname = 'Azuki'
   contract = Eth::Contract.from_abi(name: contractname, address: addr, abi: abi)
-  puts "コントラクトアドレス→#{contract.address}"
   totalSupply = cli.call(contract, "totalSupply")
   if num <= totalSupply
     return true
   else
     return false
   end
+end
+
+def allNamesInFolder(path)
+  results = []
+  Dir.foreach(path) do |item|
+    results.push(item)
+  end
+  puts results[1]
+  return results
 end
