@@ -12,3 +12,5 @@ gem 'puma'
 gem "sinatra-cross_origin", "~> 0.3.1"
 gem 'eth', '0.5.5'
 gem 'sinatra-reloader'
+gem 'erb-formatter'
+gem "rufo"

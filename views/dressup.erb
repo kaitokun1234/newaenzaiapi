@@ -1,170 +1,82 @@
-<style>
-.box {
-  /*width: 200px;       /* 適当な幅を指定 */
-  height: 200px;      /* 適当な高さを指定 */
-  position: relative; /* 基準位置とする */
-}
-
-.box img {
-  width: 200px;       /* 適当な幅を指定 */
-  position: absolute; /* 相対位置に指定 */
-}
-
-body {
-  background-color: black;
-}
-
-</style>
-
+<link href="css/dressup.css" rel="stylesheet" crossorigin="anonymous">
 <a class="btn btn-primary connect">connect wallet</a>
 
-    <div class="box" style="display: none;">
-      <img src="" height="200" width="200" class="preview img_01">
-      <img src="" height="200" width="200" class="preview img_02">
-    </div>
-
-    <div class="cloths Wom" style="display:none;">
-      <h3 class="mt-4">choose</h3>
-      <% for filename in @clothesFemaleNames do %>
-        <input type="image" src="<%= @clothesFamalePath %><%= filename %>" style="border: double;" height="100" width="100" class="cloth" data-id='<%= filename %>'/>
-      <% end %>
-      <input type="image" src="assets/cloths/0.png" style="border: double;" height="100" width="100" class="cloth" data-id='0'/>
-      <input type="image" src="assets/cloths/1.png" style="border: double;" height="100" width="100" class="cloth" data-id='1'/> 
-      <input type="image" src="assets/cloths/2.png" style="border: double;" height="100" width="100" class="cloth" data-id='2'/>
-    </div>
-
-    <div class="cloths Men" style="display:none;" >
-      <h3 class="mt-4">choose</h3>
-      <input type="image" src="assets/cloths/3.png" style="border: double;" height="100" width="100" class="cloth" data-id='3'/>
-      <input type="image" src="assets/cloths/4.png" style="border: double;" height="100" width="100" class="cloth" data-id='4'/> 
-      <input type="image" src="assets/cloths/5.png" style="border: double;" height="100" width="100" class="cloth" data-id='5'/>
-    </div>
-<!--
-<div id="bodys" style="display: none;">
-  <h3 class="text-white">body選択</h3>
-  <input type="image" src="/senzai/images/156.png" style="border: double;" height="100" width="100" class="body" data-id='156'/>
-  <input type="image" src="/senzai/images/17.png" style="border: double;" height="100" width="100" class="body" data-id='17'/>
-  <input type="image" src="/senzai/images/191.png" style="border: double;" height="100" width="100" class="body" data-id='191'/>
-  <input type="image" src="/senzai/images/190.png" style="border: double;" height="100" width="100" class="body" data-id='190'/>
-  <input type="image" src="/senzai/images/189.png" style="border: double;" height="100" width="100" class="body" data-id='189'/>
-  <input type="image" src="/senzai/images/188.png" style="border: double;" height="100" width="100" class="body" data-id='188'/>
+<div class="box" width="250" height="250" style="display: none;">
+  <img src="" width="250" class="preview img_01 border p-2">
+  <img class="preview img_02 p-2" width="250" style="display:none;">
 </div>
--->
-<form action="dress" method="POST">
-  <div
-  class="inputbody" style="display: none;">
-    <h3>Enter the TokenID</h3>
-    <input type="text" class="inputbody form-control" name="target" placeholder="体">
-    <a class="btn btn-primary mt-3 ok">OK</a>
-  </div>
 
-  <div>
+<ul class="nav nav-tabs" id="myTab" role="tablist" style="display:none;">
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link active"
+      id="clothes-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#clothes"
+      type="button"
+      role="tab"
+      aria-controls="clothes"
+      aria-selected="true"
+    >
+      cloth
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link"
+      id="ear-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#ear"
+      type="button"
+      role="tab"
+      aria-controls="ear"
+      aria-selected="false"
+    >
+      ear
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link"
+      id="contact-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#contact"
+      type="button"
+      role="tab"
+      aria-controls="contact"
+      aria-selected="false"
+    >
+      face
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+  <% for i in 0..1 %>
+    <div class="tab-pane fade show active cloths <%= i == 0 ? "Wom" : "Men" %> mt-3 border" style="display:none;" id ="clothes" role="tabpanel" aria-labelledby="clothes-tab">
+      <h3 class="mt-4">choose</h3>
+      <% for filename in @clothesNames[i] do %>
+        <input type="image" src="<%= @clothesPath[i] %><%= filename %>" style="border: double;" height="200" width="200" class="cloth bg-dark m-3" data-id='<%= filename %>'/>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="tab-pane fade ear mt-3 border" id ="ear" role="tabpanel" aria-labelledby="ear-tab">
+    <h1 class="mt-4">ears</h1>
+  </div>
+</div>
+
+  <form action="dress" method="POST">
+    <div class="inputbody" style="display: none;">
+      <h3>Enter the TokenID</h3>
+      <input type="text" class="inputbody form-control" name="target" placeholder="Token ID">
+      <a class="btn btn-primary mt-3 ok">OK</a>
+    </div>
     <input type="text" class="inputcloth" name="cloth" placeholder="服" hidden>
-  </div>
-  <div>
+    <input type="text" class="inputsex" name="sex" placeholder="性別" hidden>
     <input type="submit" value="決定" style="display: none;" class="btn btn-primary mt-5 kettei">
-  </div>
-</form>
+  </form>
+</div>
 
 <script src="./js/abi.js"></script>
-<script>
-  let web3, contract, user, usersNfts, sex;
-  const contractAddr = "0x9c8230d31f9f513901685f91fa18b3c038118a1e";
-
-  $(document).ready(async () => {
-  web3 = await new Web3(Web3.givenProvider);
-  switchNetwork(1);
-  contract =  await new web3.eth.Contract(abi.senzai, contractAddr);
-  })
-
-  $(".connect").click(async () => {
-  try{
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    user = accounts[0];
-    if(await switchNetwork(1)){
-      web3 = await new Web3(Web3.givenProvider);
-      $(".connect").hide();
-      contract =  await new web3.eth.Contract(abi.senzai, contractAddr);
-      $("div.inputbody").show();
-    }
-  } catch (error){
-    alert(error.message);
-  }
-})
-
-const switchNetwork = async (chainId) => {
-  const currentChainId = await web3.eth.net.getId();
-  if (currentChainId !== chainId) {
-    try {
-      await web3.currentProvider.request({
-        method: 'wallet_switchEthereumChain',
-          params: [{ chainId: Web3.utils.toHex(chainId) }],
-        });
-      return true;
-    } catch (switchError) {
-      return false;
-      if (switchError.code === 4902) {
-        alert('add this chain id')
-      }
-    }
-  }else{
-    return true;
-  }
-}
-
-$(".ok").on('click', async function(){
-  let val = $('input.inputbody').val();
-  let owner = await contract.methods.ownerOf(val).call();
-
-
-  if(owner.toUpperCase() != user.toUpperCase()){
-    alert("This NFT's owner is not you");
-    location.reload();
-  }
-  if(owner.toUpperCase() == user.toUpperCase()){
-    $("div.inputbody").hide();
-    $('.box').show();
-    fetch("/senzai/metadata/"+val)
-      .then(response => {
-        return response.json();
-    })
-    .then(jsondata => {
-      console.log(jsondata);
-      console.log(jsondata.attributes[1].value.slice(0, 3));
-      sex = jsondata.attributes[1].value.slice(0, 3);
-      $('.cloths.'+sex).show();
-    });
-    $(".preview.img_01").attr('src', "assets/origin/origin-"+val+".png");
-  }
-})
-
-/*
-$('.body').on('click', async function(){
-  let val = $(this).data('id');
-  $('.inputbody').val(val);
-  $(".preview.img_01").attr('src', "/raw_images/"+val+".png")
-  let data;
-  fetch("/senzai/metadata/"+val)
-  .then(response => {
-   return response.json();
-})
-.then(jsondata => {
-  console.log(jsondata);
-  $(".preview.img_bg").attr('src', "assets/compound/shirtsBg/"+jsondata.attributes[0].value+".png");
-  console.log("assets/compound/shirtsBg/"+jsondata.attributes[0].value+".png");
-  $(".preview.img_nude").attr('src', "assets/compound/body/"+jsondata.attributes[1].value+".png");
-});
-  $('#cloths').show();
-})
-*/
-
-  $('.cloth').on('click', function(){
-    let val = $(this).data('id');
-    path = sex == "Men" ? "clothesMale" : "clothesFemale"
-    $('.inputcloth').val(val);
-    $(".preview.img_02").attr('src', `assets/${path}/${val}`);
-    $('.kettei').show();
-  })
-</script>
+<script src="./js/dressup.js"></script>
