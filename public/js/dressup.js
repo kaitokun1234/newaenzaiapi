@@ -1,4 +1,4 @@
-let web3, contract, user, usersNfts, sex;
+let web3, contract, user, usersNfts, sex, signature;
 const contractAddr = "0x9c8230d31f9f513901685f91fa18b3c038118a1e";
 
 $(document).ready(async () => {
@@ -15,15 +15,26 @@ $(".connect").click(async () => {
     user = accounts[0];
     if(await switchNetwork(1)){
       web3 = await new Web3(Web3.givenProvider);
-      $(".connect").hide();
       contract =  await new web3.eth.Contract(abi.senzai, contractAddr);
-      $("div.inputbody").show();
-      window.sessionStorage.setItem(['user'],[user]);
+      //await sign();
+      $(".welcome").hide();
+      $(".connect").hide();
+      $("div.inputbody").fadeIn();
     }
   } catch (error){
     alert(error.message);
   }
 })
+
+const sign = async () => {
+  try {
+    signature = await web3.eth.personal.sign($('#signrand').val(), user);
+    $(".inputsign").val(signature);
+  }catch(error){
+    alert(error.message);
+    location.reload();
+  }
+}
 
 const switchNetwork = async (chainId) => {
   const currentChainId = await web3.eth.net.getId();
@@ -35,10 +46,10 @@ const switchNetwork = async (chainId) => {
         });
       return true;
     } catch (switchError) {
-      return false;
       if (switchError.code === 4902) {
         alert('add this chain id');
       }
+      return false;
     }
   }else{
     return true;
@@ -51,7 +62,8 @@ $(".ok").on('click', async function(){
 
   if(owner.toUpperCase() == user.toUpperCase()){
     $("div.inputbody").hide();
-    $('.box').show();
+    $('.box').fadeIn();
+    $('#nftname').html("SENZAI #"+val);
     fetch("/senzai/metadata/"+val)
     .then(response => {
       return response.json();
@@ -59,8 +71,7 @@ $(".ok").on('click', async function(){
     .then(jsondata => {
       sex = jsondata.attributes[1].value.slice(0, 3);
       $(".inputsex").val(sex);
-      $("ul").show();
-      //$('.cloths.'+sex).show();
+      $('.cloths.'+sex).fadeIn();
     });
     $(".preview.img_01").attr('src', "assets/origin/origin-"+val+".png");
   } else {
@@ -71,9 +82,33 @@ $(".ok").on('click', async function(){
 
 $('.cloth').on('click', function(){
   let val = $(this).data('id');
+  $(".cloth").removeClass("border border-white");
+  $(this).addClass("border border-white");
   path = sex == "Men" ? "clothesMale" : "clothesFemale"
-  $(".preview.img_02").show();
+  $(".preview.img_02").fadeIn();
   $('.inputcloth').val(val);
   $(".preview.img_02").attr('src', `assets/${path}/${val}`);
-  $('.kettei').show();
+  $('.kettei').fadeIn();
 })
+
+$('.kettei').on('click', async function(){
+  await submitdress();
+})
+
+async function submitdress(){
+  await sign();
+  document.dressForm.action="dress";
+	document.dressForm.method="POST";
+	document.dressForm.submit();
+}
+
+const moons = ['👔', '👕', '👖', '👗', '👘', '🥻', '👙', '👓', '🧥'];
+let count = 0;
+setInterval(()=> {
+  hashtext = ""
+  for (i=0;i<50;i++){
+    hashtext += moons[count % moons.length];
+  }
+	location.hash = hashtext;
+	count++;
+}, 275);

@@ -1,0 +1,6 @@
+<img src="/senzai/images/<%= params[:target] %>.png" width="200" height="200" class="m-4">
+
+<% msg = params[:done] == "true" ? "complete!" : "failed..." %>
+<h1 class="m-4">dressup <%= msg %></h1>
+
+<a href="/" class="m-4">Top</a>

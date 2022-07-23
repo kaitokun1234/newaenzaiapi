@@ -13,13 +13,17 @@ configure do enable :cross_origin end
 
 enable :sessions #これでsessionが使える
 
-get '/' do redirect 'https://sz.senzai.app/' end
+get '/' do 
+  redirect 'https://sz.senzai.app/' 
+end
 
 get '/senzai/metadata/:num' do
   cross_origin
   content_type :json
   fileID = params[:num]
-  fileID = fileID + ".json" if !fileID.include?(".json")
+  if !fileID.include?(".json")
+    fileID = fileID + ".json"
+  end
   fileID.split(".")[1]
   hash = File.open("json/#{fileID}"){ |f| JSON.load(f) }
   alreadyMintCheck(fileID.split(".")[0].to_i) ? hash.to_json : "it is not mint yet"
@@ -43,17 +47,22 @@ get '/raw_images/:num' do
   end
 end
 
-get '/dressup' do
-  @clothesPath = ['assets/clothesFemale/', 'assets/clothesMale/']
-  @clothesNames = []
-  for i in 0..1
-    @clothesNames.push(allNamesInFolder("public/"+@clothesPath[i]))
-  end
-  erb :dressup
-end
+
+# get '/dressup' do
+#   @signrand = 'Ethereum Signed Message:'+rand(10000).to_s
+#   session[:rand] = @signrand
+#   @title = "SENZAI-dressup-"
+#   @clothesPath = ['assets/clothesFemale/', 'assets/clothesMale/']
+#   @clothesNames = []
+#   for i in 0..1
+#     @clothesNames.push(allNamesInFolder("public/"+@clothesPath[i]))
+#   end
+#   erb :dressup
+# end
 
 post '/dress' do
-  owned = ownerValite(session[:user], params[:target])
+  owned = ownerValidate(session[:rand], params[:target], params[:sign])
+  done =false
   if owned
     body = Magick::Image.read("public/assets/origin/origin-#{params[:target]}.png").first
     path = params[:sex] == "Wom" ? "clothesFemale" : "clothesMale"
@@ -64,15 +73,23 @@ post '/dress' do
     hash = File.open(jsonpath) { |f| JSON.load(f) } 
     hash["attributes"][6]["value"] = params[:cloth].split(".")[0]
     File.open(jsonpath, "w") { |f| JSON.dump(hash, f) }
+    done = true
   end
-  redirect "/dressup"
+  redirect "/dressuped/#{params[:target]}/#{done}"
 end
 
-def ownerValidate(addr, tokenid)
+get '/dressuped/:target/:done' do
+  erb :dressuped
+end
+
+def ownerValidate(signMsg, tokenid, signature)
   addr = "0x9c8230d31F9f513901685f91FA18B3C038118A1E"
   cli = Eth::Client.create "https://mainnet.infura.io/v3/91ee6f7916c2401da3e84e67d4d4be20"
   contract = Eth::Contract.from_abi(name: "SENZAI", address: addr, abi: getAbi())
-  if addr == cli.call(contract, "ownerOf", tokenid)
+  public_key = Eth::Signature.personal_recover(signMsg, signature)
+  address = Eth::Util.public_key_to_address(public_key)
+  owner = cli.call(contract, "ownerOf", tokenid.to_i)
+  if address.to_s.upcase == owner.to_s.upcase
     return true
   else
     return false
