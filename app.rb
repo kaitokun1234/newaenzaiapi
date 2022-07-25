@@ -47,18 +47,17 @@ get '/raw_images/:num' do
   end
 end
 
-
-# get '/dressup' do
-#   @signrand = 'Ethereum Signed Message:'+rand(10000).to_s
-#   session[:rand] = @signrand
-#   @title = "SENZAI-dressup-"
-#   @clothesPath = ['assets/clothesFemale/', 'assets/clothesMale/']
-#   @clothesNames = []
-#   for i in 0..1
-#     @clothesNames.push(allNamesInFolder("public/"+@clothesPath[i]))
-#   end
-#   erb :dressup
-# end
+get '/dressup' do
+  @signrand = 'Ethereum Signed Message:'+rand(10000).to_s
+  session[:rand] = @signrand
+  @title = "SENZAI-dressup-"
+  @clothesPath = ['assets/clothesFemale/', 'assets/clothesMale/']
+  @clothesNames = []
+  for i in 0..1
+    @clothesNames.push(allNamesInFolder("public/"+@clothesPath[i]))
+  end
+  erb :dressup
+end
 
 post '/dress' do
   owned = ownerValidate(session[:rand], params[:target], params[:sign])
